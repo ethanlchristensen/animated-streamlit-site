@@ -16,7 +16,7 @@ from streamlit_extras.colored_header import colored_header
 # cache resource so we don't have to load the df
 # each time we interact with the site
 @st.cache_resource
-def get_data():
+def get_data(period='D'):
     df = pd.read_csv('data.csv')
     return df
 
@@ -46,16 +46,24 @@ go = st.button('Run Chart')
 # text area to store row counter
 text = st.text('')
 
-# place to hold a pie chart
-pie_chart = st.empty()
+columns = st.columns([1, 1])
 
-# place to hold a timeline chart
-time_chart = st.empty()
+with columns[0]:
+    # place to hold a pie chart
+    pie_chart = st.empty()
+
+with columns[1]:
+    # place to hold a timeline chart
+    time_chart = st.empty()
+
+# place to hold scatter for wind speed
+# colored by wind direction
+scatter_chart = st.empty()
 
 if go:
     # if the button was clicked, set this variable
     # so the whole loop runs
-    st.session_state['go'] = True
+    st.session_state['go'] = not st.session_state['go']
 
 # if they clicked the go button
 if st.session_state.get('go'):
@@ -73,13 +81,19 @@ if st.session_state.get('go'):
         )
         
         # create a line chart
-        timeline_fig = px.line(sub_df, x='date', y=['temp', 'dew', 'rain'])
+        timeline_fig = px.line(sub_df, x='date', y=['temp', 'dew', 'rain', 'snow'], title="Temperature, Dew Point, Rain, and Snow Over Time")
+        
+        # create a scatter chart
+        scatter_fig = px.scatter(data_frame=sub_df, x='date', y='wnd_spd', color='wnd_dir', title='Wind Speed and Direction Over Time')
         
         # plot the chart in streamlit
         pie_chart.plotly_chart(figure_or_data=pie_fig, use_container_width=True)
         
         # plot the chart in streamlit
         time_chart.plotly_chart(figure_or_data=timeline_fig, use_container_width=True)
+        
+        # plot the chart in streamlit
+        scatter_chart.plotly_chart(figure_or_data=scatter_fig, use_container_width=True)
 
     # rest this variable
     st.session_state['go'] = False
