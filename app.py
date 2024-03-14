@@ -52,6 +52,11 @@ pie_chart = st.empty()
 # place to hold a timeline chart
 time_chart = st.empty()
 
+if go:
+    # if the button was clicked, set this variable
+    # so the whole loop runs
+    st.session_state['go'] = True
+
 # if they clicked the go button
 if st.session_state.get('go'):
     # loop and keep growing the df row by row
@@ -78,8 +83,3 @@ if st.session_state.get('go'):
 
     # rest this variable
     st.session_state['go'] = False
-
-if go:
-    # if the button was clicked, set this variable
-    # so the whole loop runs
-    st.session_state['go'] = True
