@@ -3,6 +3,7 @@
 ### Requirements
 - python 3.11
 
+### Installation
 ```bash
 pip install pandas, plotly, streamlit, streamlit-extras
 ```
