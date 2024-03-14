@@ -74,7 +74,7 @@ if st.session_state.get('go'):
         
         # create a pie chart
         pie_fig = px.pie(
-            data_frame=sub_df.groupby('wnd_dir').size().reset_index(name='count'),
+            data_frame=sub_df.groupby(by=['wnd_dir',]).size().reset_index(name='count'),
             values='count',
             names='wnd_dir',
             title='Wind Direction Readings'
